@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Modal Verbs Quiz – ENS Preparation</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
 :root {
   --navy: #0f1b2d;
@@ -146,62 +147,56 @@ main{max-width:780px;margin:0 auto;padding:2rem 1.2rem 5rem}
 </style>
 </head>
 <body>
-
 <header class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">✦ Advanced Grammar</div>
-    <h1>Modal Verbs <span>QCM</span></h1>
-    <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-top:.4rem">Answer all 50 questions to unlock your results and personalised feedback.</p>
-    <div class="hero-meta">
-      <div>📝 <strong>50 questions</strong></div>
-      <div>⭐ <strong>2 pts each</strong> — 100 pts total</div>
-      <div>🎯 <strong>ENS Preparation</strong></div>
-    </div>
-  </div>
-</header>
-
-<div class="progress-shell">
-  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
-  <div class="progress-info">
-    <span class="progress-text">Progress</span>
-    <span class="unanswered-warning" id="warn-msg">⚠ Please answer all questions first</span>
-    <span class="progress-count" id="prog-count">0 / 50</span>
-  </div>
+<div class="hero-inner">
+<div class="hero-badge">✦ Advanced Grammar</div>
+<h1>Modal Verbs <span>QCM</span></h1>
+<p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-top:.4rem">Answer all 50 questions to unlock your results and personalised feedback.</p>
+<div class="hero-meta">
+<div>📝 <strong>50 questions</strong></div>
+<div>⭐ <strong>2 pts each</strong> — 100 pts total</div>
+<div>🎯 <strong>ENS Preparation</strong></div>
 </div>
-
+</div>
+</header>
+<div class="progress-shell">
+<div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+<div class="progress-info">
+<span class="progress-text">Progress</span>
+<span class="unanswered-warning" id="warn-msg">⚠ Please answer all questions first</span>
+<span class="progress-count" id="prog-count">0 / 50</span>
+</div>
+</div>
 <main>
-  <div id="results-panel">
-    <div class="results-hero">
-      <div class="score-circle" id="score-circle">
-        <div class="score-big" id="score-big">0</div>
-        <div class="score-of">/ 100</div>
-      </div>
-      <div class="grade-pill" id="grade-pill">–</div>
-      <div class="results-title" id="res-title">–</div>
-      <div class="results-msg" id="res-msg">–</div>
-      <div class="results-actions">
-        <button class="btn-retry" onclick="resetQuiz()">↺ Try Again</button>
-        <button class="btn-review" onclick="scrollToReview()">📋 Review Mistakes</button>
-      </div>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-box"><div class="stat-num c" id="s-correct">0</div><div class="stat-label">Correct</div></div>
-      <div class="stat-box"><div class="stat-num w" id="s-wrong">0</div><div class="stat-label">Incorrect</div></div>
-      <div class="stat-box"><div class="stat-num p" id="s-pct">0%</div><div class="stat-label">Score</div></div>
-    </div>
-  </div>
-
-  <div id="review-section"></div>
-  <div id="quiz-body"></div>
-
-  <div class="submit-wrap">
-    <button id="submit-btn" onclick="submitQuiz()" disabled>
-      <span>✦</span> Submit My Answers
+<div id="results-panel">
+<div class="results-hero">
+<div class="score-circle" id="score-circle">
+<div class="score-big" id="score-big">0</div>
+<div class="score-of">/ 100</div>
+</div>
+<div class="grade-pill" id="grade-pill">–</div>
+<div class="results-title" id="res-title">–</div>
+<div class="results-msg" id="res-msg">–</div>
+<div class="results-actions">
+<button class="btn-retry" onclick="resetQuiz()">↺ Try Again</button>
+<button class="btn-review" onclick="scrollToReview()">📋 Review Mistakes</button>
+</div>
+</div>
+<div class="stats-grid">
+<div class="stat-box"><div class="stat-num c" id="s-correct">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-box"><div class="stat-num w" id="s-wrong">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-box"><div class="stat-num p" id="s-pct">0%</div><div class="stat-label">Score</div></div>
+</div>
+</div>
+<div id="review-section"></div>
+<div id="quiz-body"></div>
+<div class="submit-wrap">
+<button disabled="" id="submit-btn" onclick="submitQuiz()">
+<span>✦</span> Submit My Answers
     </button>
-    <div class="submit-hint" id="submit-hint">Answer all 50 questions to enable submission.</div>
-  </div>
+<div class="submit-hint" id="submit-hint">Answer all 50 questions to enable submission.</div>
+</div>
 </main>
-
 <script>
 const Q = [
   { q:"You ___ finish this assignment before tomorrow.", opts:["must","may","can","might"], ans:0,
@@ -282,8 +277,8 @@ const Q = [
     exp:"<strong>should have + past participle</strong> expresses a past criticism or reproach — you were expected to speak politely but apparently did not. This is the classic structure for expressing regret or reproach about a past action." },
   { q:"They ___ have misunderstood the instructions.", opts:["must","must have","might","can"], ans:1,
     exp:"<strong>must have + past participle</strong> expresses a logical deduction about a past event — we are almost certain they misunderstood, probably because the results show errors. The perfect form is essential to refer to a completed past event." },
-  { q:"He ___ have known the answer.", opts:["might","might have","must","should"], ans:1,
-    exp:"<strong>might have + past participle</strong> expresses a past possibility — it is possible he knew the answer, but we are uncertain. The perfect form (<em>might have known</em>) places the possibility in the past. <em>Must have known</em> would express near-certainty." },
+  { q:"He ___ have known the answer.", opts:["might","must","should","can"], ans:0,
+    exp:"<strong>might + have + past participle</strong> expresses a past possibility. Since the sentence already contains "have", the correct modal is simply <em>might</em>, forming: <em>might have known</em>. <em>Must</em> would express near-certainty, which is too strong here." },
   { q:"You ___ respect the rules.", opts:["must","may","might","could"], ans:0,
     exp:"<strong>must</strong> expresses a strong obligation or a rule that is binding. Respecting the rules is a requirement, not a possibility. <em>May/might/could</em> all express possibility or permission, which does not fit the meaning of an obligation." },
   { q:"She ___ come tomorrow.", opts:["may","must","should","can"], ans:0,
