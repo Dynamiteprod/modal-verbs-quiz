@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Modal Verbs Quiz – ENS Preparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #0f1b2d;
+  --navy2: #1a2d47;
+  --cream: #f5f0e8;
+  --cream2: #ede7d9;
+  --gold: #c8922a;
+  --gold-light: #e8b84b;
+  --correct: #1a7a4a;
+  --correct-bg: #edf7f2;
+  --wrong: #b82c2c;
+  --wrong-bg: #fdf0f0;
+  --warning: #d97706;
+  --text: #1c1c2e;
+  --muted: #6b7280;
+  --border: #d9d0c0;
+  --white: #ffffff;
+  --card-shadow: 0 2px 12px rgba(15,27,45,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* ── HERO HEADER ── */
+.hero{background:var(--navy);color:#fff;padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 50%, rgba(200,146,42,.15) 0%, transparent 60%),
+             repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px);
+  pointer-events:none}
+.hero-inner{max-width:780px;margin:0 auto;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,146,42,.2);border:1px solid rgba(200,146,42,.4);color:var(--gold-light);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .9rem;border-radius:20px;margin-bottom:1.2rem}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.1;margin-bottom:.6rem}
+.hero h1 span{color:var(--gold-light)}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1rem}
+.hero-meta div{font-size:.82rem;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:.4rem}
+.hero-meta strong{color:#fff}
+
+/* ── STICKY PROGRESS ── */
+.progress-shell{position:sticky;top:0;z-index:200;background:var(--navy2);border-bottom:1px solid rgba(255,255,255,.07)}
+.progress-track{height:4px;background:rgba(255,255,255,.1)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .35s ease;width:0%}
+.progress-info{display:flex;justify-content:space-between;align-items:center;padding:.55rem 1.5rem;max-width:780px;margin:0 auto}
+.progress-text{font-size:.78rem;color:rgba(255,255,255,.7);font-weight:500}
+.progress-count{font-size:.78rem;color:var(--gold-light);font-weight:700;letter-spacing:.04em}
+.unanswered-warning{font-size:.74rem;color:#f59e0b;font-weight:600;display:none;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── MAIN ── */
+main{max-width:780px;margin:0 auto;padding:2rem 1.2rem 5rem}
+
+/* ── SECTION DIVIDER ── */
+.section-label{display:flex;align-items:center;gap:.8rem;margin:2rem 0 1rem;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.section-label::before,.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── QUESTION CARD ── */
+.q-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:1.6rem 1.8rem 1.4rem;margin-bottom:1rem;transition:border-color .2s,box-shadow .2s;position:relative}
+.q-card:hover{box-shadow:var(--card-shadow)}
+.q-card.unanswered-flash{border-color:var(--warning);animation:flashCard .6s ease}
+@keyframes flashCard{0%,100%{border-color:var(--warning)}50%{border-color:#fde68a;background:#fffbeb}}
+.q-card.done{border-color:#c8d8c0}
+
+.q-head{display:flex;align-items:flex-start;gap:.9rem;margin-bottom:1rem}
+.q-num{min-width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.q-card.done .q-num{background:var(--gold)}
+.q-text{font-size:.98rem;font-weight:500;line-height:1.55;padding-top:.1rem}
+.blank{display:inline-block;background:var(--navy);color:var(--cream);padding:.05em .4em;border-radius:4px;font-weight:700;letter-spacing:.05em;font-size:.9em}
+
+/* ── OPTIONS ── */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:500px){.options{grid-template-columns:1fr}}
+
+.opt{display:flex;align-items:center;gap:.65rem;border:1.5px solid var(--border);border-radius:7px;padding:.65rem .9rem;cursor:pointer;font-size:.88rem;transition:all .15s;background:var(--cream);user-select:none}
+.opt:hover{border-color:var(--gold);background:#fdf6e8}
+.opt input{display:none}
+.opt-letter{width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--border);color:var(--muted);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt.selected{border-color:var(--navy);background:#eef2f8}
+.opt.selected .opt-letter{background:var(--navy);color:#fff}
+
+/* post-submit states */
+.opt.is-correct{border-color:var(--correct);background:var(--correct-bg);pointer-events:none}
+.opt.is-correct .opt-letter{background:var(--correct);color:#fff}
+.opt.is-wrong{border-color:var(--wrong);background:var(--wrong-bg);pointer-events:none}
+.opt.is-wrong .opt-letter{background:var(--wrong);color:#fff}
+.opt.is-neutral{opacity:.5;pointer-events:none}
+
+/* ── EXPLANATION BOX ── */
+.explanation{display:none;margin-top:1rem;padding:1rem 1.1rem;background:#fff8ee;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:.84rem;line-height:1.6}
+.explanation.show{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.explanation strong{color:var(--gold);font-weight:700}
+.explanation .correct-label{display:inline-flex;align-items:center;gap:.4rem;background:var(--correct-bg);color:var(--correct);border:1px solid #a7d4ba;padding:.2rem .7rem;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:.5rem}
+
+/* ── SUBMIT ── */
+.submit-wrap{text-align:center;margin-top:2.5rem}
+#submit-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:#fff;border:none;padding:1rem 3rem;border-radius:8px;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;letter-spacing:.03em;transition:all .2s;position:relative;overflow:hidden}
+#submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 50%,rgba(200,146,42,.15));opacity:0;transition:opacity .2s}
+#submit-btn:hover:not(:disabled)::before{opacity:1}
+#submit-btn:hover:not(:disabled){background:var(--navy2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(15,27,45,.25)}
+#submit-btn:disabled{background:#9ca3af;cursor:not-allowed;transform:none;box-shadow:none}
+.submit-hint{font-size:.8rem;color:var(--muted);margin-top:.8rem}
+
+/* ── RESULTS PANEL ── */
+#results-panel{display:none;margin-bottom:2.5rem}
+#results-panel.show{display:block;animation:slideDown .5s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+
+.results-hero{background:var(--navy);color:#fff;border-radius:12px;padding:2.5rem 2rem;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.results-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(200,146,42,.2),transparent 60%)}
+.score-circle{width:110px;height:110px;border-radius:50%;border:4px solid rgba(200,146,42,.3);margin:0 auto 1.2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;background:rgba(255,255,255,.04)}
+.score-circle::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(var(--gold) var(--pct,0deg), transparent 0deg);z-index:-1;transition:all 1s ease}
+.score-big{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;line-height:1}
+.score-of{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.08em}
+.grade-pill{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;font-size:.8rem;padding:.35rem 1.2rem;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;margin:.8rem 0 .5rem}
+.results-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;margin-bottom:.3rem}
+.results-msg{font-size:.88rem;color:rgba(255,255,255,.65);max-width:420px;margin:0 auto}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-box{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:1.2rem;text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;line-height:1}
+.stat-num.c{color:var(--correct)}
+.stat-num.w{color:var(--wrong)}
+.stat-num.p{color:var(--gold)}
+.stat-label{font-size:.74rem;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+
+.results-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.btn-retry{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:.7rem 1.8rem;border-radius:7px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-retry:hover{border-color:var(--gold-light);color:var(--gold-light)}
+.btn-review{background:var(--gold);border:none;color:var(--navy);padding:.7rem 1.8rem;border-radius:7px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-review:hover{background:var(--gold-light)}
+
+/* ── REVIEW SECTION ── */
+#review-section{display:none}
+#review-section.show{display:block}
+.review-header{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.wrong-badge{background:var(--wrong-bg);color:var(--wrong);border:1px solid #f0b8b8;font-size:.72rem;font-weight:700;padding:.2rem .7rem;border-radius:20px;font-family:'Outfit',sans-serif}
+.all-correct-msg{background:var(--correct-bg);border:1.5px solid #a7d4ba;border-radius:10px;padding:1.5rem;text-align:center;color:var(--correct)}
+.all-correct-msg .big-check{font-size:2.5rem;margin-bottom:.5rem}
+.all-correct-msg strong{font-family:'Cormorant Garamond',serif;font-size:1.3rem;display:block}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Advanced Grammar</div>
+    <h1>Modal Verbs <span>QCM</span></h1>
+    <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-top:.4rem">Answer all 50 questions to unlock your results and personalised feedback.</p>
+    <div class="hero-meta">
+      <div>📝 <strong>50 questions</strong></div>
+      <div>⭐ <strong>2 pts each</strong> — 100 pts total</div>
+      <div>🎯 <strong>ENS Preparation</strong></div>
+    </div>
+  </div>
+</header>
+
+<div class="progress-shell">
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  <div class="progress-info">
+    <span class="progress-text">Progress</span>
+    <span class="unanswered-warning" id="warn-msg">⚠ Please answer all questions first</span>
+    <span class="progress-count" id="prog-count">0 / 50</span>
+  </div>
+</div>
+
+<main>
+  <div id="results-panel">
+    <div class="results-hero">
+      <div class="score-circle" id="score-circle">
+        <div class="score-big" id="score-big">0</div>
+        <div class="score-of">/ 100</div>
+      </div>
+      <div class="grade-pill" id="grade-pill">–</div>
+      <div class="results-title" id="res-title">–</div>
+      <div class="results-msg" id="res-msg">–</div>
+      <div class="results-actions">
+        <button class="btn-retry" onclick="resetQuiz()">↺ Try Again</button>
+        <button class="btn-review" onclick="scrollToReview()">📋 Review Mistakes</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-num c" id="s-correct">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat-box"><div class="stat-num w" id="s-wrong">0</div><div class="stat-label">Incorrect</div></div>
+      <div class="stat-box"><div class="stat-num p" id="s-pct">0%</div><div class="stat-label">Score</div></div>
+    </div>
+  </div>
+
+  <div id="review-section"></div>
+  <div id="quiz-body"></div>
+
+  <div class="submit-wrap">
+    <button id="submit-btn" onclick="submitQuiz()" disabled>
+      <span>✦</span> Submit My Answers
+    </button>
+    <div class="submit-hint" id="submit-hint">Answer all 50 questions to enable submission.</div>
+  </div>
+</main>
+
+<script>
+const Q = [
+  { q:"You ___ finish this assignment before tomorrow.", opts:["must","may","can","might"], ans:0,
+    exp:"<strong>must</strong> expresses a strong obligation or necessity. Here, it signals that finishing the assignment is required — not optional. <em>may/might</em> only express possibility, and <em>can</em> expresses ability." },
+  { q:"Students ___ wear uniforms in this school.", opts:["must","ought","could","might"], ans:0,
+    exp:"<strong>must</strong> is used for rules and regulations imposed by authority. Wearing a uniform is a school rule, so <em>must</em> is the correct choice. <em>ought to</em> would need 'to', and <em>could/might</em> only express possibility." },
+  { q:"You ___ smoke here. It is strictly forbidden.", opts:["mustn't","needn't","shouldn't","couldn't"], ans:0,
+    exp:"<strong>mustn't</strong> (must not) expresses a strict prohibition — something is not allowed. <em>Needn't</em> means there is no necessity (but it isn't forbidden), and <em>shouldn't</em> is a softer advice. The clue 'strictly forbidden' demands <em>mustn't</em>." },
+  { q:"___ I borrow your pen for a moment?", opts:["Must","May","Need","Ought"], ans:1,
+    exp:"<strong>May I…?</strong> is the standard polite formula for asking permission. <em>Must I</em> asks about obligation, <em>Need I</em> is archaic in this context, and <em>Ought</em> requires <em>to</em> and doesn't fit a permission request." },
+  { q:"She ___ speak four languages fluently.", opts:["may","must","can","ought"], ans:2,
+    exp:"<strong>can</strong> expresses a genuine ability or skill. Speaking four languages is a talent, not a possibility (<em>may</em>) or obligation (<em>must</em>). Use <em>can</em> whenever the sentence describes what someone is able to do." },
+  { q:"You ___ see a doctor if the pain continues.", opts:["should","may","can","might"], ans:0,
+    exp:"<strong>should</strong> gives advice or a recommendation. The structure 'you should do X if Y' is the classic advisory pattern. <em>May/might</em> express possibility, not advice." },
+  { q:"He ___ come to the meeting; he is very busy.", opts:["might","must","should","need"], ans:0,
+    exp:"<strong>might</strong> expresses a weak or uncertain possibility about a future event. Because he is very busy, his attendance is uncertain but not impossible. <em>Must</em> would imply near-certainty." },
+  { q:"You ___ finish the test within two hours.", opts:["must","may","can","need"], ans:0,
+    exp:"<strong>must</strong> expresses a rule or imposed requirement. A time limit for a test is a regulation, so <em>must</em> is correct. <em>Can</em> would mean you are able to, which changes the meaning." },
+  { q:"We ___ hurry or we will miss the train.", opts:["must","may","could","might"], ans:0,
+    exp:"<strong>must</strong> conveys urgency and strong necessity. The consequence ('we will miss the train') makes hurrying obligatory, not just possible. <em>May/might/could</em> imply uncertainty, which doesn't match the urgency." },
+  { q:"He ___ be at home; his car is not there.", opts:["must","can't","should","may"], ans:1,
+    exp:"<strong>can't</strong> expresses logical impossibility based on evidence. His absent car is evidence that he is NOT home — so we deduce this is impossible. Compare: <em>must be</em> (certain he IS there) vs <em>can't be</em> (certain he is NOT there)." },
+  { q:"You ___ talk during the exam.", opts:["mustn't","needn't","shouldn't","can't"], ans:0,
+    exp:"<strong>mustn't</strong> expresses a strict prohibition (rule-based). Talking during an exam is forbidden by regulation. <em>Needn't</em> = no need to (not forbidden), <em>shouldn't</em> = advisable not to (softer)." },
+  { q:"She ___ swim very well.", opts:["may","must","can","should"], ans:2,
+    exp:"<strong>can</strong> expresses physical ability or skill. Swimming is a learned skill. <em>May</em> would mean 'she has permission to swim', which is a different meaning entirely." },
+  { q:"You ___ bring your passport when traveling abroad.", opts:["must","should","might","could"], ans:0,
+    exp:"<strong>must</strong> expresses a legal or official obligation. Carrying a passport is required by law when traveling internationally. <em>Should</em> would make it mere advice, not a legal requirement." },
+  { q:"They ___ arrive late because of traffic.", opts:["may","must","should","ought"], ans:0,
+    exp:"<strong>may</strong> expresses a genuine possibility about a future event. Traffic is an uncertain factor — they might or might not be late. <em>Must</em> would express near-certainty, which is too strong here." },
+  { q:"You ___ worry about the exam; you studied well.", opts:["needn't","mustn't","shouldn't","can't"], ans:0,
+    exp:"<strong>needn't</strong> (need not) means there is no necessity or reason to do something — it is not required. Worrying is unnecessary because preparation is done. <em>Mustn't</em> would make it a prohibition ('you are forbidden from worrying'), which is logically odd." },
+  { q:"He ___ have forgotten the appointment.", opts:["must","might","can","should"], ans:1,
+    exp:"<strong>might have + past participle</strong> expresses a past possibility — something that possibly happened. We are speculating about the past. <em>Must have forgotten</em> would mean we are almost certain, but <em>might have</em> shows it is only a possibility." },
+  { q:"You ___ work harder if you want to pass.", opts:["should","may","might","need"], ans:0,
+    exp:"<strong>should</strong> gives strong advice or a recommendation. The conditional structure 'if you want to pass' makes this clearly a piece of advice. <em>May/might</em> express possibility, not advice." },
+  { q:"___ you help me with this problem?", opts:["Must","Can","Ought","Need"], ans:1,
+    exp:"<strong>Can you…?</strong> is the standard informal request for help or assistance. <em>Must you</em> asks about obligation, which is inappropriate for a request. <em>Could you</em> is also correct but is not one of the options." },
+  { q:"She ___ be very tired after the journey.", opts:["must","may","can","should"], ans:0,
+    exp:"<strong>must</strong> here expresses a logical deduction or near-certainty based on known facts. A long journey logically causes fatigue — we are almost certain she is tired. <em>May</em> would express mere possibility, which is weaker." },
+  { q:"You ___ park your car here.", opts:["mustn't","needn't","shouldn't","couldn't"], ans:0,
+    exp:"<strong>mustn't</strong> expresses a strict prohibition — parking here is forbidden by a rule or sign. <em>Shouldn't</em> is softer advice. When a rule or regulation is involved, <em>mustn't</em> is the appropriate modal." },
+  { q:"He ___ finish the task if he tries harder.", opts:["can","must","may","ought"], ans:0,
+    exp:"<strong>can</strong> expresses potential ability — what someone is capable of achieving with effort. The conditional 'if he tries harder' signals that the ability is within reach. <em>May</em> expresses possibility, not potential ability." },
+  { q:"We ___ respect our elders.", opts:["should","must","might","can"], ans:0,
+    exp:"<strong>should</strong> expresses a moral obligation or social expectation. Respecting elders is a widely held value — something we are expected (but not legally forced) to do. <em>Must</em> would make it a stronger legal or absolute obligation." },
+  { q:"You ___ bring an umbrella. It looks like rain.", opts:["should","mustn't","can't","needn't"], ans:0,
+    exp:"<strong>should</strong> gives practical advice based on observable conditions. 'It looks like rain' is the reason for the advice. <em>Mustn't</em> is a prohibition, which makes no sense here." },
+  { q:"She ___ have seen the accident.", opts:["might","must","should","ought"], ans:0,
+    exp:"<strong>might have + past participle</strong> expresses a past possibility — it is possible that she saw the accident, but we are not sure. <em>Must have seen</em> would mean near-certainty; <em>might have seen</em> indicates uncertainty about whether it happened." },
+  { q:"They ___ solve the problem without assistance.", opts:["can","must","may","should"], ans:0,
+    exp:"<strong>can</strong> expresses ability or capability. The sentence states what they are able to do on their own. <em>May</em> would express permission, which changes the meaning to 'they are allowed to solve it', not that they are able to." },
+  { q:"You ___ leave early if you want.", opts:["may","must","should","need"], ans:0,
+    exp:"<strong>may</strong> grants permission. 'You may leave' is the classic structure for allowing someone to do something. <em>Must</em> would impose an obligation, and <em>should</em> would turn it into advice." },
+  { q:"He ___ be joking; that story is unbelievable.", opts:["must","might","can","ought"], ans:1,
+    exp:"<strong>might</strong> expresses uncertainty or a weak possibility. The speaker is not sure whether he is joking — it is just a possibility. <em>Must be joking</em> would mean the speaker is almost certain it's a joke, but the word 'unbelievable' suggests doubt, not certainty." },
+  { q:"You ___ eat too much sugar.", opts:["shouldn't","mustn't","can't","needn't"], ans:0,
+    exp:"<strong>shouldn't</strong> (should not) gives health advice — it is inadvisable but not strictly forbidden. <em>Mustn't</em> would mean it is prohibited, which is too strong for a dietary recommendation. <em>Shouldn't</em> is the appropriate modal for general health or lifestyle advice." },
+  { q:"Students ___ submit their assignments on time.", opts:["must","might","can","should not"], ans:0,
+    exp:"<strong>must</strong> expresses an academic rule or institutional requirement. Submitting on time is a compulsory regulation, not merely suggested. <em>Should</em> would soften it to advice, but <em>must</em> correctly represents a binding obligation." },
+  { q:"She ___ understand the lesson after the explanation.", opts:["should","may","must","can"], ans:3,
+    exp:"<strong>can</strong> expresses acquired ability. After receiving an explanation, she now has the capacity to understand. <em>Should</em> would imply it is expected of her (obligation-like), but <em>can</em> correctly captures the ability gained from the explanation." },
+  { q:"You ___ have told me earlier.", opts:["should","should have","must","can"], ans:1,
+    exp:"<strong>should have + past participle</strong> expresses a past obligation that was NOT fulfilled — a criticism or regret about the past. The correct form must be the perfect modal: <em>should have told</em>, not the simple <em>should tell</em>, because the action is in the past." },
+  { q:"He ___ have finished the work already.", opts:["must","must have","might","should"], ans:1,
+    exp:"<strong>must have + past participle</strong> expresses a strong logical deduction about a past event — we are almost certain it happened. The perfect form (<em>must have finished</em>) is required because we are reasoning about the past, not giving a present obligation." },
+  { q:"She ___ have forgotten her keys.", opts:["might","might have","can","must"], ans:1,
+    exp:"<strong>might have + past participle</strong> expresses a past possibility — something that possibly happened but is uncertain. The perfect form (<em>might have forgotten</em>) is obligatory to refer to a past event. Simple <em>might forget</em> would be about the future." },
+  { q:"You ___ have been more careful.", opts:["should","should have","must","might"], ans:1,
+    exp:"<strong>should have + past participle</strong> expresses regret or criticism about a past action that did not happen. It implies: you were not careful enough, and you should have been. The past perfect modal is necessary here because it refers to a past event." },
+  { q:"They ___ have missed the bus.", opts:["must","must have","may","should"], ans:1,
+    exp:"<strong>must have + past participle</strong> expresses a near-certain deduction about the past — we are almost sure they missed it based on evidence. The perfect structure (<em>must have missed</em>) is required because the event is past, not present." },
+  { q:"He ___ have taken the wrong train.", opts:["might","might have","must","can"], ans:1,
+    exp:"<strong>might have + past participle</strong> expresses a past possibility — it is possible that he took the wrong train, but we are not sure. The perfect form is essential to place the event in the past. <em>Might take</em> would refer to the future." },
+  { q:"She ___ have completed the work by now.", opts:["should","should have","may","must"], ans:1,
+    exp:"<strong>should have + past participle</strong> expresses an expectation about the past — based on normal circumstances or a deadline, she was expected to finish. The perfect modal is required because 'by now' anchors the event in the past." },
+  { q:"You ___ have spoken to him politely.", opts:["should","should have","must","may"], ans:1,
+    exp:"<strong>should have + past participle</strong> expresses a past criticism or reproach — you were expected to speak politely but apparently did not. This is the classic structure for expressing regret or reproach about a past action." },
+  { q:"They ___ have misunderstood the instructions.", opts:["must","must have","might","can"], ans:1,
+    exp:"<strong>must have + past participle</strong> expresses a logical deduction about a past event — we are almost certain they misunderstood, probably because the results show errors. The perfect form is essential to refer to a completed past event." },
+  { q:"He ___ have known the answer.", opts:["might","might have","must","should"], ans:1,
+    exp:"<strong>might have + past participle</strong> expresses a past possibility — it is possible he knew the answer, but we are uncertain. The perfect form (<em>might have known</em>) places the possibility in the past. <em>Must have known</em> would express near-certainty." },
+  { q:"You ___ respect the rules.", opts:["must","may","might","could"], ans:0,
+    exp:"<strong>must</strong> expresses a strong obligation or a rule that is binding. Respecting the rules is a requirement, not a possibility. <em>May/might/could</em> all express possibility or permission, which does not fit the meaning of an obligation." },
+  { q:"She ___ come tomorrow.", opts:["may","must","should","can"], ans:0,
+    exp:"<strong>may</strong> expresses a future possibility — she might come or she might not. This is a neutral statement of possibility. <em>Must</em> would mean she is required to come, and <em>should</em> would mean it is expected or advised." },
+  { q:"You ___ apologize for your mistake.", opts:["should","may","might","could"], ans:0,
+    exp:"<strong>should</strong> expresses a moral obligation or strong recommendation. Apologizing for a mistake is socially and morally expected. <em>May/might/could</em> express possibility or permission, which do not capture the sense of moral duty here." },
+  { q:"He ___ finish the work tonight.", opts:["may","must","should","can"], ans:1,
+    exp:"<strong>must</strong> expresses a strong obligation or necessity. The implication is that finishing tonight is required, not just possible. <em>May</em> would make it a mere possibility, while <em>must</em> signals that it is compulsory." },
+  { q:"You ___ forget to lock the door.", opts:["mustn't","needn't","shouldn't","couldn't"], ans:0,
+    exp:"<strong>mustn't</strong> expresses a strong prohibition or warning. Forgetting to lock the door is dangerous — it must NOT happen. <em>Shouldn't</em> would be softer advice; <em>needn't</em> means there is no necessity, which has the opposite meaning." },
+  { q:"Students ___ follow the instructions carefully.", opts:["must","might","may","could"], ans:0,
+    exp:"<strong>must</strong> expresses a binding academic or institutional requirement. Following instructions carefully is obligatory in an academic setting. <em>Might/may/could</em> all express possibility or permission, which does not fit the context of a rule." },
+  { q:"She ___ be waiting for us.", opts:["may","must","should","can"], ans:0,
+    exp:"<strong>may</strong> expresses a present possibility — it is possible that she is waiting right now, but we are not certain. <em>Must be waiting</em> would mean near-certainty based on evidence, which is not indicated here." },
+  { q:"He ___ speak during the ceremony.", opts:["may","must","might","should"], ans:0,
+    exp:"<strong>may</strong> expresses permission — he has been given permission or authority to speak. In formal contexts (ceremonies, official events), <em>may</em> is the correct modal for granted permission. <em>Must</em> would mean it is an obligation." },
+  { q:"You ___ finish the report today.", opts:["must","might","could","may"], ans:0,
+    exp:"<strong>must</strong> expresses a strong obligation or deadline. Finishing the report today is a requirement, not a possibility. <em>Might/could/may</em> all express possibility or permission, which would make finishing optional rather than required." },
+  { q:"We ___ respect the law.", opts:["must","might","could","may"], ans:0,
+    exp:"<strong>must</strong> expresses an absolute obligation — both moral and legal. Respecting the law is a fundamental civic duty, which calls for the strongest modal of obligation. <em>Might/could/may</em> express possibility, which is inappropriate for a civic or legal requirement." }
+];
+
+const LETTERS = ['A','B','C','D'];
+let answered = new Array(50).fill(null);
+let submitted = false;
+
+function build() {
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = '';
+  const sections = [
+    {label:'Part 1 – Present & Future Modals', from:0, to:29},
+    {label:'Part 2 – Perfect Modals (Past)', from:30, to:39},
+    {label:'Part 3 – Mixed Practice', from:40, to:49}
+  ];
+  sections.forEach(sec => {
+    body.innerHTML += `<div class="section-label">${sec.label}</div>`;
+    for(let i = sec.from; i <= sec.to; i++){
+      const q = Q[i];
+      const qHTML = q.q.replace('___','<span class="blank">___</span>');
+      const optsHTML = q.opts.map((o,j)=>`
+        <label class="opt" id="opt-${i}-${j}">
+          <input type="radio" name="q${i}" value="${j}" onchange="pick(${i},${j})"/>
+          <span class="opt-letter">${LETTERS[j]}</span>
+          <span>${o}</span>
+        </label>`).join('');
+      body.innerHTML += `
+        <div class="q-card" id="card-${i}">
+          <div class="q-head">
+            <div class="q-num">${i+1}</div>
+            <div class="q-text">${qHTML}</div>
+          </div>
+          <div class="options">${optsHTML}</div>
+          <div class="explanation" id="exp-${i}"></div>
+        </div>`;
+    }
+  });
+}
+
+function pick(qi, oi){
+  if(submitted) return;
+  answered[qi] = oi;
+  for(let j=0;j<4;j++) document.getElementById(`opt-${qi}-${j}`)?.classList.remove('selected');
+  document.getElementById(`opt-${qi}-${oi}`)?.classList.add('selected');
+  document.getElementById(`card-${qi}`)?.classList.add('done');
+  updateProgress();
+}
+
+function updateProgress(){
+  const done = answered.filter(v=>v!==null).length;
+  document.getElementById('prog-fill').style.width = (done/50*100)+'%';
+  document.getElementById('prog-count').textContent = done+' / 50';
+  const btn = document.getElementById('submit-btn');
+  const hint = document.getElementById('submit-hint');
+  const remaining = 50 - done;
+  if(done === 50){
+    btn.disabled = false;
+    hint.textContent = 'All questions answered. Ready to submit!';
+    hint.style.color = 'var(--correct)';
+    document.getElementById('warn-msg').style.display = 'none';
+  } else {
+    btn.disabled = true;
+    hint.textContent = `${remaining} question${remaining>1?'s':''} remaining.`;
+    hint.style.color = 'var(--muted)';
+  }
+}
+
+function submitQuiz(){
+  if(submitted) return;
+  // check all answered
+  const unanswered = answered.map((v,i)=>v===null?i:null).filter(v=>v!==null);
+  if(unanswered.length > 0){
+    document.getElementById('warn-msg').style.display = 'inline';
+    const first = unanswered[0];
+    document.getElementById(`card-${first}`).scrollIntoView({behavior:'smooth',block:'center'});
+    unanswered.forEach(i => {
+      const card = document.getElementById(`card-${i}`);
+      card.classList.add('unanswered-flash');
+      setTimeout(()=>card.classList.remove('unanswered-flash'), 700);
+    });
+    return;
+  }
+  submitted = true;
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('submit-hint').style.display = 'none';
+
+  let correct = 0;
+  const wrongList = [];
+
+  Q.forEach((q,i)=>{
+    const user = answered[i];
+    const right = q.ans;
+    // style options
+    for(let j=0;j<4;j++){
+      const lbl = document.getElementById(`opt-${i}-${j}`);
+      if(!lbl) return;
+      lbl.style.cursor = 'default';
+      if(j===right) lbl.classList.add('is-correct');
+      else if(j===user && j!==right) lbl.classList.add('is-wrong');
+      else lbl.classList.add('is-neutral');
+    }
+    if(user===right){
+      correct++;
+    } else {
+      wrongList.push(i);
+      // show explanation
+      const expDiv = document.getElementById(`exp-${i}`);
+      expDiv.innerHTML = `
+        <div class="correct-label">✔ Correct answer: ${LETTERS[right]}) ${q.opts[right]}</div>
+        <p>${q.exp}</p>`;
+      expDiv.classList.add('show');
+    }
+  });
+
+  showResults(correct, wrongList);
+}
+
+function showResults(correct, wrongList){
+  const pct = correct * 2;
+  const deg = (correct/50)*360;
+
+  document.getElementById('score-circle').style.setProperty('--pct', deg+'deg');
+  document.getElementById('score-big').textContent = pct;
+  document.getElementById('s-correct').textContent = correct;
+  document.getElementById('s-wrong').textContent = 50-correct;
+  document.getElementById('s-pct').textContent = pct+'%';
+
+  let grade, title, msg;
+  if(pct>=90){grade='A – Excellent';title='Outstanding Performance!';msg='You have a superb command of modal verbs. You are excellently prepared for the ENS exam.';}
+  else if(pct>=75){grade='B – Very Good';title='Very Good Work!';msg='Strong understanding of modal verbs. A light review of the sections where you made mistakes will perfect your mastery.';}
+  else if(pct>=60){grade='C – Good';title='Good Effort!';msg='Solid foundations. Focus your revision on modal perfect structures (should have / must have / might have).';}
+  else if(pct>=50){grade='D – Satisfactory';title='Keep Practising!';msg='You understand the basics but need more practice, especially with deductions and past modal forms.';}
+  else{grade='E – Needs Work';title='More Revision Needed';msg='Review the core uses of each modal verb and the modal perfect (have + past participle) structures carefully.';}
+
+  document.getElementById('grade-pill').textContent = grade;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-msg').textContent = msg;
+
+  const panel = document.getElementById('results-panel');
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+
+  // build review
+  const rev = document.getElementById('review-section');
+  if(wrongList.length === 0){
+    rev.innerHTML = `
+      <div class="all-correct-msg">
+        <div class="big-check">🏆</div>
+        <strong>Perfect Score! Every answer is correct.</strong>
+        <p style="font-size:.85rem;margin-top:.4rem;color:var(--correct)">Exceptional mastery of modal verbs.</p>
+      </div>`;
+  } else {
+    rev.innerHTML = `<div class="review-header">
+      Questions to Review <span class="wrong-badge">${wrongList.length} incorrect</span>
+    </div>`;
+  }
+  rev.classList.add('show');
+}
+
+function scrollToReview(){
+  document.getElementById('review-section').scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  answered = new Array(50).fill(null);
+  submitted = false;
+  document.getElementById('results-panel').classList.remove('show');
+  document.getElementById('review-section').classList.remove('show');
+  document.getElementById('review-section').innerHTML = '';
+  document.getElementById('submit-btn').style.display = 'inline-flex';
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-hint').style.display = 'block';
+  document.getElementById('submit-hint').textContent = 'Answer all 50 questions to enable submission.';
+  document.getElementById('submit-hint').style.color = 'var(--muted)';
+  document.getElementById('warn-msg').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-count').textContent = '0 / 50';
+  build();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+build();
+</script>
+</body>
+</html>
